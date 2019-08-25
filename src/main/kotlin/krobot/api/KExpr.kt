@@ -8,7 +8,14 @@ import krobot.impl.KFile
 import krobot.impl.joinTo
 
 abstract class KExpr internal constructor() {
-    internal abstract fun writeTo(out: KFile)
+    abstract fun writeTo(out: KFile)
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+        val file = KFile(sb)
+        writeTo(file)
+        return sb.toString()
+    }
 }
 
 internal fun expr(string: String) = object : KExpr() {
