@@ -113,4 +113,4 @@ Simply clone the project and open it in the IDE. To run the tests you will need 
 Nikolaus Knop (niko.knop003@gmail.com)
 
 ## License
-See LICENSE.MD
+See [LICENSE.MD](LICENSE.MD)
