@@ -13,7 +13,7 @@ class KSubjectWhenExpr internal constructor(
     private val subject: KExpr,
     private val cases: KSubjectWhenExpr.() -> Unit
 ) : KExpr() {
-    private lateinit var file: KFile
+    lateinit var file: KFile; private set
 
     override fun writeTo(out: KFile) {
         file = out
@@ -26,7 +26,7 @@ class KSubjectWhenExpr internal constructor(
         file.writeln("}")
     }
 
-    fun case(case: Case, block: KBlockRobot.() -> Unit) {
+    inline fun case(case: Case, block: KBlockRobot.() -> Unit) {
         file.write(case.toString())
         file.writeln(" -> { ")
         file.incIndent()
@@ -35,7 +35,36 @@ class KSubjectWhenExpr internal constructor(
         file.writeln("}")
     }
 
-    fun case(case: Case, then: KExpr) = case(case) { evaluate(then) }
+    inline fun case(expr: KExpr, block: KBlockRobot.() -> Unit) {
+        case(equalTo(expr), block)
+    }
+
+    fun case(case: Case, then: KExpr) {
+        file.write(case.toString())
+        file.write(" -> ")
+        then.writeTo(file)
+        file.ensureNewline()
+    }
+
+    fun case(expr: KExpr, then: KExpr) {
+        case(equalTo(expr), then)
+    }
+
+    inline infix fun Case.then(block: KBlockRobot.() -> Unit) {
+        case(this, block)
+    }
+
+    inline infix fun KExpr.then(block: KBlockRobot.() -> Unit) {
+        case(this, block)
+    }
+
+    infix fun Case.then(expr: KExpr) {
+        case(this, expr)
+    }
+
+    infix fun KExpr.then(expr: KExpr) {
+        case(this, expr)
+    }
 
     fun otherwise(block: KBlockRobot.() -> Unit) = case(Else, block)
 
