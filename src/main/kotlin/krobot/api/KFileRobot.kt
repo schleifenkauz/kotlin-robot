@@ -6,7 +6,6 @@ package krobot.api
 
 import krobot.impl.KFile
 import krobot.impl.Naming
-import kotlin.reflect.KType
 
 @KRobotDsl
 class KFileRobot private constructor(
@@ -23,7 +22,7 @@ class KFileRobot private constructor(
         name: String,
         modifiers: KModifiersRobot.() -> Unit = {},
         typeParameters: KTypeParametersRobot.() -> Unit = {},
-        type: KType
+        type: KtType
     ) {
         Naming.checkIdentifier("Type alias name", name)
         file.ensureNewline()

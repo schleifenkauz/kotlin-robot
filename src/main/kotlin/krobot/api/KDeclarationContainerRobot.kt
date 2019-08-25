@@ -6,7 +6,6 @@ package krobot.api
 
 import krobot.api.KClassRobot.Companion.body
 import krobot.impl.KFile
-import kotlin.reflect.KType
 
 @KRobotDsl
 abstract class KDeclarationContainerRobot @PublishedApi internal constructor(
@@ -54,7 +53,7 @@ abstract class KDeclarationContainerRobot @PublishedApi internal constructor(
     fun addFunction(
         name: String,
         modifiers: KModifiersRobot.() -> Unit = {},
-        receiver: KType? = null,
+        receiver: KtType? = null,
         typeParameters: KTypeParametersRobot.() -> Unit = {},
         parameters: KParametersRobot.() -> Unit = {},
         returnType: KtType = type("kotlin.Unit"),
@@ -66,7 +65,7 @@ abstract class KDeclarationContainerRobot @PublishedApi internal constructor(
     fun addSingleExprFunction(
         name: String,
         modifiers: KModifiersRobot.() -> Unit = {},
-        receiver: KType? = null,
+        receiver: KtType? = null,
         typeParameters: KTypeParametersRobot.() -> Unit = {},
         parameters: KParametersRobot.() -> Unit = {},
         returnType: KtType? = null,
@@ -82,7 +81,7 @@ abstract class KDeclarationContainerRobot @PublishedApi internal constructor(
         name: String,
         modifiers: KModifiersRobot.() -> Unit = {},
         typeParameters: KTypeParametersRobot.() -> Unit = {},
-        receiver: KType? = null,
+        receiver: KtType? = null,
         parameters: KParametersRobot.() -> Unit = {},
         returnType: KtType
     ) {

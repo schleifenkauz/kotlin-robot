@@ -1,7 +1,6 @@
 package krobot.api
 
 import krobot.impl.KFile
-import kotlin.reflect.KType
 
 @KRobotDsl
 class KFunctionRobot @PublishedApi internal constructor(file: KFile) : KBlockRobot(file) {
@@ -13,7 +12,7 @@ class KFunctionRobot @PublishedApi internal constructor(file: KFile) : KBlockRob
             typeParameters: KTypeParametersRobot.() -> Unit,
             parameters: KParametersRobot.() -> Unit,
             returnType: KtType?,
-            receiver: KType?
+            receiver: KtType?
         ) {
             file.ensureNewline()
             KModifiersRobot.write(file, modifiers)
@@ -39,7 +38,7 @@ class KFunctionRobot @PublishedApi internal constructor(file: KFile) : KBlockRob
             parameters: KParametersRobot.() -> Unit,
             returnType: KtType,
             body: KFunctionRobot.() -> Unit,
-            receiver: KType?
+            receiver: KtType?
         ) {
             file.ensureNewline()
             writeNoBody(file, name, modifiers, typeParameters, parameters, returnType, receiver)

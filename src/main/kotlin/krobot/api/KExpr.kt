@@ -6,7 +6,6 @@ package krobot.api
 
 import krobot.impl.KFile
 import krobot.impl.joinTo
-import kotlin.reflect.KType
 
 abstract class KExpr internal constructor() {
     internal abstract fun writeTo(out: KFile)
@@ -142,11 +141,11 @@ fun finally(block: KBlockRobot.() -> Unit) = Finally(block)
 
 data class Catch internal constructor(
     internal val name: String,
-    internal val type: KType,
+    internal val type: KtType,
     internal val block: KBlockRobot.() -> Unit
 )
 
-fun catch(name: String, type: KType, block: KBlockRobot.() -> Unit) = Catch(name, type, block)
+fun catch(name: String, type: KtType, block: KBlockRobot.() -> Unit) = Catch(name, type, block)
 
 private class Lambda(private val parameters: List<String>, private val expr: KExpr) : KExpr() {
     override fun writeTo(out: KFile) {
@@ -213,6 +212,9 @@ infix fun KExpr.cast(type: KtType) = operatorApplication(this, "as", expr(type.t
 
 fun block(body: KBlockRobot.() -> Unit): KExpr = expr { KBlockRobot(this).body() }
 
+operator fun String.invoke(vararg args: KExpr) = call(this, *args)
 
+val `this` = "this".e
 
+val String.q get() = expr("\"$this\"")
 

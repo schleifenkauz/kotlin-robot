@@ -5,10 +5,35 @@
 package krobot.api
 
 import org.junit.jupiter.api.Test
+import java.nio.file.Paths
 
 internal class Spec {
     @Test fun `KRobot should generate the right code`() {
         testData1.writeTo(System.out)
+    }
+
+    @Test fun `fluent example`() {
+        kotlinFile(pkg = "org.sample") {
+            addVar("magic", "Int".t, { private() }) {
+                initializeWith(int(3))
+                get {
+                    assign("field", field + "1".e)
+                    addReturn(field)
+                }
+                set {
+                    doThrow("AssertionError"())
+                }
+            }
+            addFunction("f", { private(); inline() }, receiver = "kotlin.Int".t) {
+                addIf(`this` equalTo int(2)) {
+                    "println"("BOOM".q)
+                }.elseIf(`this` equalTo int(3)) {
+                    "println"("BANG".q)
+                }.`else` {
+                    "println"("NOPE".q)
+                }
+            }
+        }.writeTo(Paths.get("example.kt"))
     }
 
     private companion object {
@@ -31,9 +56,10 @@ internal class Spec {
                     }, delegate = call("emptyList"))
                 }
             ) {
-                addVar("myVar", type("kotlin.Int")) {
+                addVar("myVar", type("kotlin.Int"), {
                     public()
-                }.initializeWith(int(123)) {
+                }) {
+                    initializeWith(int(123))
                     get {
                         addReturn(field)
                     }
@@ -63,16 +89,16 @@ internal class Spec {
                 )
                 addCompanion(
                     { private() },
-                    { implement(
+                    {
+                        implement(
                             type("List").parameterizedBy { covariant(type("kotlin.Int")) },
                             delegate = call("emptyList")
                         )
                     }
                 ) {
-                    addVal("SIZE") {
-                        private()
-                        const()
-                    } initializeWith int(0)
+                    addVal("SIZE", null, { private(); const() }) {
+                        initializeWith(int(0))
+                    }
                 }
             }
             addEnumClass(
@@ -81,12 +107,14 @@ internal class Spec {
                 {
                     implement(type("java.io.Serializable"))
                 },
-                entries = {
+                entries =
+                {
                     add("A")
                     add("B")
                     add("C")
                 }
-            ) {
+            )
+            {
                 addFunction(
                     "toString",
                     modifiers = { override() },
@@ -95,11 +123,11 @@ internal class Spec {
                     evaluate(`if`(getVar("this") equalTo (getVar("E") select getVar("A"))) {
                         addReturn(stringLiteral("a"))
                     }.elseIf(getVar("this").equalTo(getVar("E").select(getVar("B")))) {
-                            addReturn(stringLiteral("b"))
+                        addReturn(stringLiteral("b"))
                     }.elseIf(getVar("this") equalTo (getVar("E") select getVar("C"))) {
                         addReturn(stringLiteral("c"))
                     })
-                    doThrow(call("AssertionError"))
+                    doThrow("AssertionError"())
                 }
             }
         }
