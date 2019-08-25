@@ -14,6 +14,7 @@ internal class Spec {
 
     @Test fun `fluent example`() {
         kotlinFile(pkg = "org.sample") {
+            comment("@author Nikolaus Knop")
             addVar("magic", "Int".t, { private() }) {
                 initializeWith(int(3))
                 get {
@@ -25,12 +26,10 @@ internal class Spec {
                 }
             }
             addFunction("f", { private(); inline() }, receiver = "kotlin.Int".t) {
-                addIf(`this` equalTo int(2)) {
-                    "println"("BOOM".q)
-                }.elseIf(`this` equalTo int(3)) {
-                    "println"("BANG".q)
-                }.`else` {
-                    "println"("NOPE".q)
+                addWhen(`this`) {
+                    int(0) then "println"("Boom".q)
+                    containedIn(int(1)..int(4)) then "println"("Bang".q)
+                    otherwise then "println"("Nope".q)
                 }
             }
         }.writeTo(Paths.get("example.kt"))
