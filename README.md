@@ -1,6 +1,14 @@
 # Kotlin-Robot - DSL based kotlin code generation
-
 Kotlin Robot helps you generating new kotlin classes programmatically, for example in annotation processors.
+
+## Using Kotlin-Robot
+### Gradle
+```
+dependencies {
+    implementation 'com.github.nkb03:kotlin-robot:1.0'
+}
+```
+
 ## Idiomatic
 Because of its fluent DSL, code generation can look similar to regular kotlin code. 
 ```
@@ -98,12 +106,6 @@ repeat(1_000_000) { i ->
   Eventual contributors are encouraged to write some more tests.
   Reporting bugs also helps very much.
 
-## Using Kotlin Robot
-To use Kotlin Robot in your own maven/gradle project execute the following steps:
-- Clone: `git clone https://github.com/NKB03/kotlin-robot`
-- Build: `cd kotlin-robot && gradlew build`
-- Publish to local repository: `gradle publish`
-Kotlin robot has the following maven coordinates: `org.nikok:kotlin-robot:1.0`.
 
 ## Contributing
 To contribute to Kotlin Robot you are advised to use IntelliJ.
