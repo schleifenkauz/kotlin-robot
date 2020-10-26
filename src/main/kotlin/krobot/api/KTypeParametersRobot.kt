@@ -27,15 +27,15 @@ class KTypeParametersRobot private constructor(private val file: KFile) {
         isFirst = false
     }
 
-    fun covariant(type: String, upperBound: KtType? = null) {
+    fun invariant(type: String, upperBound: KtType? = null) {
         addParameter(null, type, upperBound)
     }
 
-    fun outvariant(type: String, upperBound: KtType? = null) {
+    fun covariant(type: String, upperBound: KtType? = null) {
         addParameter("out", type, upperBound)
     }
 
-    fun invariant(type: String, upperBound: KtType? = null) {
+    fun contravariant(type: String, upperBound: KtType? = null) {
         addParameter("in", type, upperBound)
     }
 
@@ -48,7 +48,7 @@ class KTypeParametersRobot private constructor(private val file: KFile) {
             val robot = KTypeParametersRobot(file)
             robot.typeParameters()
             if (!robot.isFirst) {
-                file.write(">")
+                robot.finish()
             }
         }
     }

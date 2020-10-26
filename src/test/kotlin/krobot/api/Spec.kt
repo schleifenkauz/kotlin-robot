@@ -13,7 +13,7 @@ internal class Spec {
     }
 
     @Test fun `fluent example`() {
-        kotlinFile(pkg = "org.sample") {
+        kotlinFile("org.sample", "sample.kt") {
             comment("@author Nikolaus Knop")
             addVar("magic", "Int".t, { private() }) {
                 initializeWith(int(3))
@@ -37,7 +37,7 @@ internal class Spec {
 
     private companion object {
         val testData1 = kotlinFile(
-            "com.sample",
+            "com.sample", "example.kt",
             {
                 comment("these are the commons")
                 import("com.sample.commons")
@@ -47,11 +47,11 @@ internal class Spec {
             addClass(
                 "MySampleClass",
                 { public() },
-                { outvariant("T") },
+                { covariant("T") },
                 { `val`("value").of(type("kotlin.Boolean"), defaultValue = `true`) { private() } },
                 {
                     implement(type("List").parameterizedBy {
-                        covariant(type("T"))
+                        invariant(type("T"))
                     }, delegate = call("emptyList"))
                 }
             ) {
@@ -90,7 +90,7 @@ internal class Spec {
                     { private() },
                     {
                         implement(
-                            type("List").parameterizedBy { covariant(type("kotlin.Int")) },
+                            type("List").parameterizedBy { invariant(type("kotlin.Int")) },
                             delegate = call("emptyList")
                         )
                     }

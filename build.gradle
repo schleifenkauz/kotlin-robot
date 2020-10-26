@@ -10,54 +10,17 @@ buildscript {
 }
 
 plugins {
-    id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.70'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'hextant-library' version '0.1-SNAPSHOT'
     id 'io.codearte.nexus-staging' version '0.21.2'
 }
 
+hextant_lib {
+    description = "DSL based Kotlin code generation"
+}
+
 group 'com.github.nkb03'
-version '0.1-SNAPSHOT'
-
-apply plugin: 'org.jetbrains.dokka'
-apply plugin: 'com.bmuschko.nexus'
-
-archivesBaseName = 'kotlin-robot'
-
-modifyPom {
-    project {
-        name 'kotlin-robot'
-        description 'DSL based kotlin code generation'
-        url 'https://github.com/nkb03/hextant'
-        inceptionYear '2020'
-
-        scm {
-            url 'https://github.com/nkb03/hextant'
-            connection 'git:https://github.com/nkb03/hextant.git'
-            developerConnection 'git:git://github.com/nkb03/hextant.git'
-        }
-
-        licenses {
-            license {
-                name 'The Apache Software License, Version 2.0'
-                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                distribution 'repo'
-            }
-        }
-
-        developers {
-            developer {
-                id 'santaclaus'
-                name 'Nikolaus Knop'
-                email 'niko.knop003@gmail.com'
-            }
-        }
-    }
-}
-extraArchive {
-    sources = true
-    tests = true
-    javadoc = true
-}
+version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
@@ -66,8 +29,8 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    compile "org.jetbrains.kotlin:kotlin-reflect"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.3'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.0.3'
 }

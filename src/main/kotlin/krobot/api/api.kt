@@ -10,7 +10,11 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 @KRobotDsl
-class KotlinFile internal constructor(private val write: (file: KFile) -> Unit) {
+class KotlinFile internal constructor(
+    val pkg: String?,
+    val name: String,
+    private val write: (file: KFile) -> Unit
+) {
     fun writeTo(appendable: Appendable) {
         val kFile = KFile(appendable)
         write(kFile)
@@ -27,11 +31,10 @@ fun KotlinFile.writeTo(file: File) {
 
 fun kotlinFile(
     pkg: String? = null,
+    name: String,
     imports: KImportRobot.() -> Unit = {},
     members: KFileRobot.() -> Unit = {}
-): KotlinFile {
-    return KotlinFile { file -> KFileRobot.write(file, pkg, imports, members) }
-}
+): KotlinFile = KotlinFile(pkg, name) { file -> KFileRobot.write(file, pkg, imports, members) }
 
 
 fun kotlinClass(
@@ -43,7 +46,7 @@ fun kotlinClass(
     primaryConstructor: KPrimaryConstructorRobot.() -> Unit,
     inheritance: KInheritanceRobot.() -> Unit,
     members: KClassRobot.() -> Unit = {}
-) = kotlinFile(pkg, imports) {
+) = kotlinFile(pkg, "$name.kt", imports) {
     addClass(name, modifiers, typeParameters, primaryConstructor, inheritance, members)
 }
 
@@ -55,7 +58,7 @@ fun kotlinInterface(
     typeParameters: KTypeParametersRobot.() -> Unit = {},
     inheritance: KInheritanceRobot.() -> Unit = {},
     members: KInterfaceRobot.() -> Unit = {}
-) = kotlinFile(pkg, imports) {
+) = kotlinFile(pkg, "$name.kt", imports) {
     addInterface(name, modifiers, typeParameters, inheritance, members)
 }
 
@@ -66,6 +69,6 @@ fun kotlinObject(
     modifiers: KModifiersRobot.() -> Unit = {},
     inheritance: KInheritanceRobot.() -> Unit = {},
     members: KObjectRobot.() -> Unit = {}
-) = kotlinFile(pkg, imports) {
+) = kotlinFile(pkg, "$name.kt", imports) {
     addObject(name, modifiers, inheritance, members)
 }

@@ -9,20 +9,24 @@ import krobot.impl.joinTo
 
 @KRobotDsl
 class KModifiersRobot private constructor(private val file: KFile) {
-    private fun add(modifier: String) {
+    fun add(modifier: String) {
         with(file) {
             write(modifier)
             write(" ")
         }
     }
 
-    fun annotation(name: String, vararg args: KExpr) {
+    fun annotation(name: String, args: List<KExpr>) {
         with(file) {
             write("@")
             write(name)
-            args.asIterable().joinTo(this)
+            args.joinTo(this)
             write(" ")
         }
+    }
+
+    fun annotation(name: String, vararg args: KExpr) {
+        annotation(name, args.asList())
     }
 
     fun public() = add("public")

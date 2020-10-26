@@ -5,12 +5,18 @@
 package krobot.api
 
 import kotlin.reflect.KType
+import kotlin.reflect.typeOf
 
 interface KtType
 
-fun type(name: String) = object : KtType {
-    override fun toString(): String = name
+fun type(name: Any) = object : KtType {
+    private val str = name.toString()
+
+    override fun toString(): String = str
 }
+
+@ExperimentalStdlibApi
+inline fun <reified T> type() = typeOf<T>().asKtType()
 
 fun KType.asKtType() = object : KtType {
     override fun toString(): String = this@asKtType.toString()
@@ -32,14 +38,11 @@ fun functionType(receiverType: KtType? = null, vararg argumentTypes: KtType, ret
 class KtTypeParameterization @PublishedApi internal constructor(unparameterized: KtType) {
     private val builder = StringBuilder(unparameterized.toString())
 
-    init {
-        builder.append('<')
-    }
-
     private var isFirst = true
 
     private fun addProjection(variance: String? = null, type: String) {
-        if (!isFirst) builder.append(", ")
+        if (isFirst) builder.append("<")
+        else builder.append(", ")
         if (variance != null) {
             builder.append(variance)
             builder.append(' ')
@@ -48,27 +51,27 @@ class KtTypeParameterization @PublishedApi internal constructor(unparameterized:
         isFirst = false
     }
 
-    fun covariant(type: String) {
+    fun invariant(type: String) {
         addProjection(null, type)
     }
 
-    fun covariant(type: KtType) {
+    fun invariant(type: KtType) {
         addProjection(null, type.toString())
     }
 
-    fun outvariant(type: KtType) {
+    fun covariant(type: KtType) {
         addProjection("out", type.toString())
     }
 
-    fun outvariant(type: String) {
+    fun covariant(type: String) {
         addProjection("out", type)
     }
 
-    fun invariant(type: KtType) {
+    fun contravariant(type: KtType) {
         addProjection("in", type.toString())
     }
 
-    fun invariant(type: String) {
+    fun contravariant(type: String) {
         addProjection("in", type)
     }
 
@@ -77,7 +80,7 @@ class KtTypeParameterization @PublishedApi internal constructor(unparameterized:
     }
 
     @PublishedApi internal fun buildType(): KtType {
-        builder.append('>')
+        if (!isFirst) builder.append('>')
         return type(builder.toString())
     }
 }

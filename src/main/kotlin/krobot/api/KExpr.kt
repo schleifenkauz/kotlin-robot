@@ -6,6 +6,7 @@ package krobot.api
 
 import krobot.impl.KFile
 import krobot.impl.joinTo
+import kotlin.reflect.KClass
 
 abstract class KExpr internal constructor() {
     abstract fun writeTo(out: KFile)
@@ -72,30 +73,37 @@ infix fun KExpr.select(other: KExpr) = expr {
 
 fun KExpr.call(function: String, vararg args: KExpr) = select(krobot.api.call(function, *args))
 
+fun KExpr.call(function: String, args: List<KExpr>) = select(krobot.api.call(function, args))
+
 infix fun KExpr.call(function: String): KExpr = select(krobot.api.call(function))
 
 infix fun KExpr.select(property: String) = select(getVar(property))
 
-val String.e get()= expr(this)
+val String.e get() = expr(this)
+
+fun call(name: String, typeParameters: KTypeParametersRobot.() -> Unit, args: List<KExpr>) =
+    expr {
+        write(name)
+        KTypeParametersRobot.write(this, typeParameters)
+        if (args.any() && args.last() is Lambda) {
+            val firstParameters = args.dropLast(1)
+            if (firstParameters.any()) {
+                firstParameters.asIterable().joinTo(this)
+            }
+            write(" ")
+            val lambda = args.last()
+            lambda.writeTo(this)
+        } else {
+            args.asIterable().joinTo(this)
+        }
+    }
 
 fun call(name: String, typeParameters: KTypeParametersRobot.() -> Unit, vararg args: KExpr) =
-        expr {
-            write(name)
-            KTypeParametersRobot.write(this, typeParameters)
-            if (args.any() && args.last() is Lambda) {
-                val firstParameters = args.dropLast(1)
-                if (firstParameters.any()) {
-                    firstParameters.asIterable().joinTo(this)
-                }
-                write(" ")
-                val lambda = args.last()
-                lambda.writeTo(this)
-            } else {
-                args.asIterable().joinTo(this)
-            }
-        }
+    call(name, typeParameters, args.asList())
 
 fun call(name: String, vararg args: KExpr) = call(name, {}, *args)
+
+fun call(name: String, args: List<KExpr>) = call(name, {}, args)
 
 fun `if`(cond: KExpr, then: KBlockRobot.() -> Unit) = KIfExpr(cond, then)
 
@@ -220,6 +228,12 @@ infix fun KExpr.cast(type: KtType) = operatorApplication(this, "as", expr(type.t
 fun block(body: KBlockRobot.() -> Unit): KExpr = expr { KBlockRobot(this).body() }
 
 operator fun String.invoke(vararg args: KExpr) = call(this, *args)
+
+inline fun <reified T : Any> clazz() = T::class.clazz
+
+val <T : Any> KClass<T>.clazz get() = qualifiedName!!.clazz
+
+val String.clazz get() = ("${this}::class").e
 
 val `this` = "this".e
 

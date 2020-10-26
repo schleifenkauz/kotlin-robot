@@ -101,6 +101,10 @@ open class KBlockRobot @PublishedApi internal constructor(private val file: KFil
         evaluate(call(name, typeParameters, *args))
     }
 
+    fun callFunction(name: String, typeParameters: KTypeParametersRobot.() -> Unit = {}, args: List<KExpr>) {
+        evaluate(call(name, typeParameters, args))
+    }
+
     fun callFunction(name: String, vararg args: KExpr) {
         callFunction(name, {}, *args)
     }

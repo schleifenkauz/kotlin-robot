@@ -3,4 +3,3 @@ build/
 out
 .idea
 gradle/
-gradle.properties

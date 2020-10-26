@@ -46,7 +46,7 @@ class KFile(private val writer: Appendable) {
     }
 
     fun newline() {
-        writer.appendln()
+        writer.appendLine()
         isNewLine = true
     }
 
