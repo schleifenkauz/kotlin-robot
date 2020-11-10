@@ -1,5 +1,12 @@
-.gradle/
-build/
-out
-.idea
-gradle/
+build
+.gradle
+.idea/shelf
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/usage.statistics.xml
+.idea/modules
+.idea/gradle.xml
+.idea/dictionaries
+.idea/caches
+*.iml
+!gradle/wrapper/gradle-wrapper.jar
