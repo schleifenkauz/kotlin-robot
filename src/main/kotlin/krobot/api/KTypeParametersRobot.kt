@@ -10,15 +10,15 @@ import krobot.impl.KFile
 class KTypeParametersRobot private constructor(private val file: KFile) {
     private var isFirst = true
 
-    private fun addParameter(variance: String?, type: String, upperBound: KtType?) {
+    private fun addParameter(variance: String?, type: KtType, upperBound: KtType?) {
         with(file) {
             if (isFirst) write("<")
-            if (!isFirst) write(", ")
+            else write(", ")
             if (variance != null) {
                 write(variance)
                 write(" ")
             }
-            write(type)
+            write(type.toString())
             if (upperBound != null) {
                 write(": ")
                 write(upperBound.toString())
@@ -27,16 +27,28 @@ class KTypeParametersRobot private constructor(private val file: KFile) {
         isFirst = false
     }
 
-    fun invariant(type: String, upperBound: KtType? = null) {
+    fun invariant(type: KtType, upperBound: KtType? = null) {
         addParameter(null, type, upperBound)
     }
 
-    fun covariant(type: String, upperBound: KtType? = null) {
+    fun covariant(type: KtType, upperBound: KtType? = null) {
         addParameter("out", type, upperBound)
     }
 
-    fun contravariant(type: String, upperBound: KtType? = null) {
+    fun contravariant(type: KtType, upperBound: KtType? = null) {
         addParameter("in", type, upperBound)
+    }
+
+    fun invariant(type: String, upperBound: KtType? = null) {
+        addParameter(null, type(type), upperBound)
+    }
+
+    fun covariant(type: String, upperBound: KtType? = null) {
+        addParameter("out", type(type), upperBound)
+    }
+
+    fun contravariant(type: String, upperBound: KtType? = null) {
+        addParameter("in", type(type), upperBound)
     }
 
     internal fun finish() {
