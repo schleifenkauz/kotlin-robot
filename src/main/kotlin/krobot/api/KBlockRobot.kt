@@ -97,12 +97,12 @@ open class KBlockRobot @PublishedApi internal constructor(private val file: KFil
         evaluate(`try`(block, catch, finally))
     }
 
-    fun callFunction(name: String, typeParameters: KTypeParametersRobot.() -> Unit = {}, vararg args: KExpr) {
-        evaluate(call(name, typeParameters, *args))
+    fun callFunction(name: String, typeArguments: KTypeArgumentsRobot.() -> Unit = {}, vararg args: KExpr) {
+        evaluate(call(name, typeArguments, *args))
     }
 
-    fun callFunction(name: String, typeParameters: KTypeParametersRobot.() -> Unit = {}, args: List<KExpr>) {
-        evaluate(call(name, typeParameters, args))
+    fun callFunction(name: String, typeArguments: KTypeArgumentsRobot.() -> Unit = {}, args: List<KExpr>) {
+        evaluate(call(name, typeArguments, args))
     }
 
     fun callFunction(name: String, vararg args: KExpr) {
