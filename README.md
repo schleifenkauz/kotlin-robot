@@ -1,17 +1,17 @@
 # Kotlin-Robot - DSL based kotlin code generation
-Kotlin Robot helps you generating new kotlin classes programmatically, for example in annotation processors.
+Kotlin-Robot helps you with generating new Kotlin files programmatically, for example in annotation processors.
 
 ## Using Kotlin-Robot
 ### Gradle
-```
+```groovy
 dependencies {
     implementation 'com.github.nkb03:kotlin-robot:1.0'
 }
 ```
-
-## Idiomatic
+## Features
+### Idiomatic
 Because of its fluent DSL, code generation can look similar to regular kotlin code. 
-```
+```kotlin
 kotlinFile(pkg = "org.sample") {
     comment("@author Nikolaus Knop")
     addVar("magic", "Int".t, { private() }) {
@@ -34,12 +34,14 @@ kotlinFile(pkg = "org.sample") {
 }.writeTo(Paths.get("example.kt"))
 ```
 This writes the following Kotlin code to `example.kt`
-```
+
+```kotlin
 package org.sample
+
 //@author Nikolaus Knop
 private var magic: Int = 3
     get() {
-        field = field + 1
+        field += 1
         return field
     }
     set(value) {
@@ -48,17 +50,17 @@ private var magic: Int = 3
 private inline fun kotlin.Int.f(): kotlin.Unit {
     when (this) {
         0 -> println("Boom")
-        in 1 .. 4 -> println("Bang")
+        in 1..4 -> println("Bang")
         else -> println("Nope")
     }
 }
 ```
 
-## Flexible
+### Flexible
 Nearly all language features including comments are supported by the DSL, 
 but sometimes it's easier to write raw text circumventing the DSL. Kotlin robot makes this as easy as possible.
 
-```
+```kotlin
 kotlinFile("sample.test") {
   comment("//Raw text")
   raw {
@@ -68,15 +70,15 @@ kotlinFile("sample.test") {
   }
 }
 ```
-## Fast
+### Fast
 Code is generated entirely on the fly, without storing an AST. This means the DSL directly translates to code
-only operating on output streams. Wherever possible functions with function parameters are marked inline, hich makes code generation
+only operating on output streams. Wherever possible functions with function parameters are marked inline, which makes code generation
 with Kotlin Robot even faster. 
 ## Disclaimer
 Because code is written to the output stream directly all possibly complex operations inside the DSL are reevaluated every time you call
-`writeTo on a `KotlinFile`. Therefore you should always write the code to an intermediate buffer, before writing the same `KotlinFile`
+`writeTo` on a `KotlinFile`. Therefore, you should always write the code to an intermediate buffer, before writing the same `KotlinFile`
 to multiple different OS-level files.
-```
+```kotlin
 val f = kotlinFile("do.not.do.this") {
   repeat(1_000_000) {
     //Complex operation
