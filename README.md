@@ -1,5 +1,7 @@
 # Kotlin-Robot - DSL based kotlin code generation
 Kotlin-Robot helps you with generating new Kotlin files programmatically, for example in annotation processors.
+There is a complete rewrite of this library named [https://github.com/NKb03/krobot](krobot), 
+which you are advised to use instead of this one.
 
 ## Using Kotlin-Robot
 ### Gradle
@@ -33,7 +35,7 @@ kotlinFile(pkg = "org.sample") {
     }
 }.writeTo(Paths.get("example.kt"))
 ```
-This writes the following Kotlin code to `example.kt`
+This writes the following Kotlin code to `example.kt`:
 
 ```kotlin
 package org.sample
@@ -47,7 +49,7 @@ private var magic: Int = 3
     set(value) {
         throw AssertionError()
     }
-private inline fun kotlin.Int.f(): kotlin.Unit {
+private inline fun Int.f() {
     when (this) {
         0 -> println("Boom")
         in 1..4 -> println("Bang")
@@ -89,7 +91,7 @@ repeat(1_000_000) { i ->
 }
 ```
 A better approach would be:
-```
+```kotlin
 val f = kotlinFile("do.not.do.this") {
   repeat(1_000_000) {
     //Complex operation
