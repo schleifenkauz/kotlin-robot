@@ -1,6 +1,6 @@
 # Kotlin-Robot - DSL based kotlin code generation
 Kotlin-Robot helps you with generating new Kotlin files programmatically, for example in annotation processors.
-There is a complete rewrite of this library named [https://github.com/NKb03/krobot](krobot), 
+There is a complete rewrite of this library named [krobot](https://github.com/NKB03/krobot/), 
 which you are advised to use instead of this one.
 
 ## Using Kotlin-Robot
